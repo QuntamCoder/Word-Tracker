@@ -1,67 +1,476 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Word Tracker</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Tracker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --secondary: #3a0ca3;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --success: #4cc9f0;
+      --warning: #f8961e;
+      --error: #ef233c;
+      --gray: #6c757d;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f5f7ff;
+      color: var(--dark);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+    
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 1rem 0;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      padding: 0.5rem;
+    }
+    
+    .nav-links a:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+    
+    /* Main Content */
+    main {
+      padding: 2rem 0;
+      flex: 1;
+    }
+    
+    .word-tracker-section {
+      background-color: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      margin-bottom: 2rem;
+    }
+    
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: var(--secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    
+    /* Input Group */
+    .input-group {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    #wordInput {
+      flex: 1;
+      padding: 0.8rem 1rem;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+    }
+    
+    #wordInput:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+    
+    .btn {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--secondary);
+      transform: translateY(-1px);
+    }
+    
+    /* Message */
+    .message {
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+    }
+    
+    .message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .success {
+      background-color: rgba(76, 201, 240, 0.1);
+      color: var(--success);
+      border-left: 3px solid var(--success);
+    }
+    
+    .error {
+      background-color: rgba(239, 35, 60, 0.1);
+      color: var(--error);
+      border-left: 3px solid var(--error);
+    }
+    
+    .warning {
+      background-color: rgba(248, 150, 30, 0.1);
+      color: var(--warning);
+      border-left: 3px solid var(--warning);
+    }
+    
+    /* Word List */
+    .word-list {
+      margin-top: 2rem;
+    }
+    
+    .word-list h3 {
+      margin-bottom: 1rem;
+      color: var(--secondary);
+      font-size: 1.3rem;
+    }
+    
+    .word-list ul {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 0.8rem;
+    }
+    
+    .word-list li {
+      background-color: var(--light);
+      padding: 0.8rem;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .word-list li:hover {
+      background-color: #e9ecef;
+      transform: translateY(-2px);
+    }
+    
+    /* Footer */
+    .footer {
+      background-color: var(--dark);
+      color: white;
+      padding: 2rem 0;
+      margin-top: auto;
+    }
+    
+    .footer .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    
+    .footer-bottom {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      width: 100%;
+    }
+    
+    .footer-bottom p {
+      color: #adb5bd;
+      font-size: 0.9rem;
+    }
+    
+    .footer-bottom strong {
+      color: var(--primary);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar .container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .input-group {
+        flex-direction: column;
+      }
+      
+      #wordInput {
+        width: 100%;
+      }
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Loading Spinner */
+    .spinner {
+      display: none;
+      width: 30px;
+      height: 30px;
+      border: 3px solid rgba(67, 97, 238, 0.2);
+      border-radius: 50%;
+      border-top: 3px solid var(--primary);
+      animation: spin 1s linear infinite;
+      margin: 1rem auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
-    <h1>Word Tracker</h1>
-    <input type="text" id="wordInput" placeholder="Enter a word">
-    <button onclick="addWord()">Add Word</button>
-    <button onclick="searchWord()">Search Word</button>
-    <p id="message"></p>
+  <nav class="navbar">
+    <div class="container">
+      <a href="#" class="logo"><i class="fas fa-book-open"></i> WordTracker</a>
+      <div class="nav-links">
+        <a href="#"><i class="fas fa-home"></i> Home</a>
+        <a href="#" onclick="showAllWords()"><i class="fas fa-list"></i> My Words</a>
+      </div>
+    </div>
+  </nav>
 
-    <!-- Firebase SDKs -->
-    <script type="module">
-        // Import Firebase modules
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+  <main class="container">
+    <section class="word-tracker-section">
+      <h1><i class="fas fa-language"></i> Word Tracker</h1>
 
-        // Your Firebase config
-        const firebaseConfig = {
-            apiKey: "AIzaSyCEFLQxrqS2XzAMOaU2hkP75wlsNP3CW3w",
-            authDomain: "word-tracker-8a580.firebaseapp.com",
-            projectId: "word-tracker-8a580",
-            storageBucket: "word-tracker-8a580.appspot.com",
-            messagingSenderId: "418977009698",
-            appId: "1:418977009698:web:767f6bba2601e3d17a7a7b",
-            measurementId: "G-Q2YMEJ8CRB"
-        };
+      <div class="input-group">
+        <input type="text" id="wordInput" placeholder="Enter a word..." />
+        <button onclick="addWord()" class="btn btn-primary">
+          <i class="fas fa-plus"></i> Add Word
+        </button>
+      </div>
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+      <div id="message" class="message"></div>
+      <div class="spinner" id="spinner"></div>
+      <div id="wordList" class="word-list"></div>
+    </section>
+  </main>
 
-        // Add word function
-        async function addWord() {
-            const word = document.getElementById('wordInput').value.trim().toLowerCase();
-            if (!word) return;
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> WordTracker. All rights reserved. Designed by <strong>Amol Jadhav</strong></p>
+      </div>
+    </div>
+  </footer>
 
-            const wordRef = doc(db, "words", word);
-            const wordSnap = await getDoc(wordRef);
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
-            if (wordSnap.exists()) {
-                document.getElementById("message").innerText = `"${word}" already exists in the database.`;
-            } else {
-                await setDoc(wordRef, { createdAt: new Date() });
-                document.getElementById("message").innerText = `"${word}" has been added to the database.`;
-            }
+    const firebaseConfig = {
+      apiKey: "AIzaSyCEFLQxrqS2XzAMOaU2hkP75wlsNP3CW3w",
+      authDomain: "word-tracker-8a580.firebaseapp.com",
+      projectId: "word-tracker-8a580",
+      storageBucket: "word-tracker-8a580.appspot.com",
+      messagingSenderId: "418977009698",
+      appId: "1:418977009698:web:767f6bba2601e3d17a7a7b",
+      measurementId: "G-Q2YMEJ8CRB"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function addWord() {
+      const input = document.getElementById('wordInput');
+      const word = input.value.trim().toLowerCase();
+      if (!word) return showMessage("Please enter a word first", "error");
+
+      showSpinner(true);
+      
+      try {
+        const ref = doc(db, "words", word);
+        const docSnap = await getDoc(ref);
+
+        if (docSnap.exists()) {
+          showMessage(`"${word}" already exists in your collection!`, "warning");
+          highlightWord(word);
+        } else {
+          await setDoc(ref, {
+            createdAt: new Date()
+          });
+          showMessage(`"${word}" added successfully!`, "success");
+          showAllWords(); // Refresh the word list
+        }
+        input.value = '';
+      } catch (error) {
+        console.error("Add error:", error);
+        showMessage("Something went wrong. Please try again.", "error");
+      } finally {
+        showSpinner(false);
+      }
+    }
+
+    function highlightWord(word) {
+      const wordList = document.getElementById('wordList');
+      const words = wordList.querySelectorAll('li');
+      
+      for (const w of words) {
+        if (w.textContent.toLowerCase() === word.toLowerCase()) {
+          w.style.animation = 'fadeIn 0.5s ease';
+          w.style.backgroundColor = 'rgba(67, 97, 238, 0.1)';
+          setTimeout(() => {
+            w.style.backgroundColor = '';
+          }, 2000);
+          break;
+        }
+      }
+    }
+
+    async function showAllWords() {
+      const listDiv = document.getElementById('wordList');
+      listDiv.innerHTML = "<h3><i class='fas fa-list-ul'></i> Your Words</h3>";
+      showSpinner(true);
+      
+      try {
+        const snapshot = await getDocs(collection(db, "words"));
+        if (snapshot.empty) {
+          listDiv.innerHTML += "<p>No words yet. Add some words to get started!</p>";
+          return;
         }
 
-        // Search word function
-        async function searchWord() {
-            const word = document.getElementById('wordInput').value.trim().toLowerCase();
-            if (!word) return;
+        const ul = document.createElement("ul");
+        const words = [];
+        
+        snapshot.forEach(doc => {
+          words.push({
+            id: doc.id,
+            ...doc.data()
+          });
+        });
+        
+        // Sort words alphabetically
+        words.sort((a, b) => a.id.localeCompare(b.id));
+        
+        words.forEach(word => {
+          const li = document.createElement("li");
+          li.textContent = word.id;
+          li.style.animation = 'fadeIn 0.3s ease';
+          ul.appendChild(li);
+        });
+        
+        listDiv.appendChild(ul);
+      } catch (error) {
+        console.error("Load error:", error);
+        listDiv.innerHTML += "<p>Error loading words. Please try again.</p>";
+      } finally {
+        showSpinner(false);
+      }
+    }
 
-            const wordRef = doc(db, "words", word);
-            const wordSnap = await getDoc(wordRef);
+    function showMessage(text, type) {
+      const msg = document.getElementById("message");
+      msg.textContent = text;
+      msg.className = `message ${type} show`;
+      setTimeout(() => {
+        msg.className = "message";
+      }, 4000);
+    }
+    
+    function showSpinner(show) {
+      document.getElementById('spinner').style.display = show ? 'block' : 'none';
+    }
 
-            if (wordSnap.exists()) {
-                document.getElementById("message").innerText = `"${word}" exists in the database.`;
-            } else {
-                document.getElementById("message").innerText = `"${word}" was not found.`;
-            }
+    // Initialize
+    document.addEventListener("DOMContentLoaded", () => {
+      // Set current year in footer
+      document.getElementById("year").textContent = new Date().getFullYear();
+      
+      // Load words when page loads
+      showAllWords();
+      
+      // Add enter key support
+      document.getElementById("wordInput").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+          addWord();
         }
-    </script>
+      });
+    });
+
+    // Expose to global
+    window.addWord = addWord;
+    window.showAllWords = showAllWords;
+  </script>
 </body>
 </html>
