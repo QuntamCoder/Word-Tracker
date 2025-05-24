@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Word Tracker</title>
+</head>
+<body>
+    <h1>Word Tracker</h1>
+    <input type="text" id="wordInput" placeholder="Enter a word">
+    <button onclick="addWord()">Add Word</button>
+    <button onclick="searchWord()">Search Word</button>
+    <p id="message"></p>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+        // Your Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyCEFLQxrqS2XzAMOaU2hkP75wlsNP3CW3w",
+            authDomain: "word-tracker-8a580.firebaseapp.com",
+            projectId: "word-tracker-8a580",
+            storageBucket: "word-tracker-8a580.appspot.com",
+            messagingSenderId: "418977009698",
+            appId: "1:418977009698:web:767f6bba2601e3d17a7a7b",
+            measurementId: "G-Q2YMEJ8CRB"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Add word function
+        async function addWord() {
+            const word = document.getElementById('wordInput').value.trim().toLowerCase();
+            if (!word) return;
+
+            const wordRef = doc(db, "words", word);
+            const wordSnap = await getDoc(wordRef);
+
+            if (wordSnap.exists()) {
+                document.getElementById("message").innerText = `"${word}" already exists in the database.`;
+            } else {
+                await setDoc(wordRef, { createdAt: new Date() });
+                document.getElementById("message").innerText = `"${word}" has been added to the database.`;
+            }
+        }
+
+        // Search word function
+        async function searchWord() {
+            const word = document.getElementById('wordInput').value.trim().toLowerCase();
+            if (!word) return;
+
+            const wordRef = doc(db, "words", word);
+            const wordSnap = await getDoc(wordRef);
+
+            if (wordSnap.exists()) {
+                document.getElementById("message").innerText = `"${word}" exists in the database.`;
+            } else {
+                document.getElementById("message").innerText = `"${word}" was not found.`;
+            }
+        }
+    </script>
+</body>
+</html>
