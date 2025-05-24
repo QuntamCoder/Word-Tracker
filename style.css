@@ -215,37 +215,60 @@
     }
     
     /* Footer */
-    .footer {
-      background-color: var(--dark);
-      color: white;
-      padding: 2rem 0;
-      margin-top: auto;
-    }
-    
-    .footer .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-    
-    .footer-bottom {
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      width: 100%;
-    }
-    
-    .footer-bottom p {
-      color: #adb5bd;
-      font-size: 0.9rem;
-    }
-    
-    .footer-bottom strong {
-      color: var(--primary);
-    }
-    
-    /* Responsive */
+.footer {
+  background-color: var(--dark);
+  color: white;
+  padding: 2rem 0;
+  margin-top: auto;
+}
+
+.footer .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.footer-bottom {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-bottom p {
+  color: #adb5bd;
+  font-size: 0.9rem;
+  margin-bottom: 1rem; /* Added for spacing above social links */
+}
+
+.footer-bottom strong {
+  color: var(--primary);
+}
+
+/* New Social Links Styles - Matches your existing theme */
+.social-links {
+  display: flex;
+  gap: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.social-link {
+  color: #adb5bd;
+  font-size: 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+/* Only add this if you're not already loading Font Awesome */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');    /* Responsive */
     @media (max-width: 768px) {
       .navbar .container {
         flex-direction: column;
